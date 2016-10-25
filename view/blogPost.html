@@ -4,9 +4,18 @@
 <head>
   <meta charset="utf-8">
   <title>Micro Blog</title>
+  <link href="/style/blog.css" rel="stylesheet" />
 </head>
 
 <body>
-  {{postContent}}
+  <div class="blog">
+    {{postContent}}
+  </div>
+  <script src="/script/setBlogTitle.js"></script>
+  <script>
+    var titles = document.getElementsByTagName('h1');
+
+    setBlogTitle(document, titles);
+  </script>
 </body>
 </html>

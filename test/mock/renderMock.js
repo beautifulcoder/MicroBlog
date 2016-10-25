@@ -5,11 +5,14 @@ var RenderMock = function RenderMock() {
   this.hasEngineProperties = false;
   this.hasResProperties = false;
   this.hasCachingOff = false;
+
+  this.requestPath = '';
 };
 
 RenderMock.prototype.render = function render(request, res, engine) {
   if (request) {
     this.hasRequestProperties = true;
+    this.requestPath = request.path;
   }
 
   if (request.nocache) {
