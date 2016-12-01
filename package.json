@@ -15,6 +15,6 @@
     "marked": "0.3.6"
   },
   "devDependencies": {
-    "roast.it": "1.0.4"
+    "roast.it": "1.0.5"
   }
 }
