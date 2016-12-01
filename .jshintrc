@@ -3,12 +3,14 @@
   "eqeqeq": true,
   "freeze": true,
   "maxdepth": 2,
-  "maxstatements": 10,
+  "maxstatements": 15,
   "maxparams": 3,
   "funcscope": true,
   "esversion": 5,
   "forin": true,
-  "maxcomplexity": 5,
+  "maxcomplexity": 15,
   "nonew": true,
-  "unused": true
+  "unused": true,
+  "node": true,
+  "browser": true
 }
