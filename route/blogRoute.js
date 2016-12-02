@@ -3,34 +3,41 @@ var BlogRoute = function BlogRoute(context) {
   this.req = context.req;
   this.message = context.message;
 
-  this.boundRenderPost = this.renderPost.bind(this);
+  this.contentType = 'text/html; charset=utf-8';
+  this.rawContent = '';
 };
 
 BlogRoute.prototype.route = function route() {
   var url = this.req.url;
   var index = url.indexOf('/blog/') + 1;
-  var path = url.slice(index);
+  var path = url.slice(index) + '.md';
 
-  this.message.readPost(path, this.boundRenderPost);
+  this.message.readTextFile(path, this.readPostHtmlView.bind(this));
 };
 
-BlogRoute.prototype.renderPost = function renderPost(err, postContent) {
+BlogRoute.prototype.readPostHtmlView = function readPostHtmlView(err, rawContent) {
   if (err) {
-    this.message.handler(err, this.res);
-  } else {
-    var request = {
-      path: 'view/blogPost.html',
-      type: 'text/html; charset=utf-8',
-      data: postContent
-    };
-
-    var engine = {
-      handler: this.message.handler,
-      template: this.message.mustacheTemplate
-    };
-
-    this.message.render(request, this.res, engine);
+    this.res.writeHead(404, { 'Content-Type': this.contentType });
+    this.res.end('Post not found.');
+    return;
   }
+
+  this.rawContent = rawContent;
+  this.message.readTextFile('view/blogPost.html', this.renderPost.bind(this));
+};
+
+BlogRoute.prototype.renderPost = function renderPost(err, html) {
+  if (err) {
+    this.res.writeHead(500, { 'Content-Type': this.contentType });
+    this.res.end('Internal error.');
+    return;
+  }
+
+  var htmlContent = this.message.marked(this.rawContent);
+  var responseContent = this.message.mustacheTemplate(html, { postContent: htmlContent });
+
+  this.res.writeHead(200, { 'Content-Type': this.contentType });
+  this.res.end(responseContent);
 };
 
 module.exports = BlogRoute;

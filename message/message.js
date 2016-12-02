@@ -1,11 +1,9 @@
-var render = require('./render');
-var handler = require('./handler');
 var mustacheTemplate = require('./mustacheTemplate');
-var readPost = require('./readPost');
+var readTextFile = require('./readTextFile');
+var marked = require('marked');
 
 module.exports = {
-  render: render,
-  handler: handler,
   mustacheTemplate: mustacheTemplate,
-  readPost: readPost
+  readTextFile: readTextFile,
+  marked: marked
 };

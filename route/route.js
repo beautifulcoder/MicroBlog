@@ -1,8 +1,7 @@
+var message = require('../message/message');
 var BlogRoute = require('./BlogRoute');
 
 function route(req, res) {
-  var message = require('../message/message');
-
   var context = {
     message: message,
     res: res,

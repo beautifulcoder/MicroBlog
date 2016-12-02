@@ -1,37 +1,63 @@
 var roast = require('roast.it');
 var BlogRoute = require('../route/blogRoute');
 
-var ReadPostMock = require('./mock/readPostMock');
-var HandlerMock = require('./mock/handlerMock');
-var RenderMock = require('./mock/renderMock');
+var MessageMock = require('./mock/messageMock');
+var ResponseMock = require('./mock/responseMock');
 
-roast.it('Set blog path', function setBlogPath() {
-  var readPost = new ReadPostMock();
+roast.it('Read raw post with path', function readRawPostWithPath() {
+  var messageMock = new MessageMock();
   var req = {
     url: 'http://localhost/blog/a-simple-test'
   };
-  var route = new BlogRoute({ message: readPost, req: req });
+
+  var route = new BlogRoute({ message: messageMock, req: req });
 
   route.route();
 
-  return readPost.readPostCalledWithPath === 'blog/a-simple-test' &&
-    readPost.hasReadPostCallback;
+  return messageMock.readTextFileCalledWithPath === 'blog/a-simple-test.md' &&
+    messageMock.hasCallback;
 });
 
-roast.it('Render post with error', function renderPostWithError() {
-  var handler = new HandlerMock();
-  var route = new BlogRoute({ message: handler, res: 'content' });
+roast.it('Read post view with path', function readPostViewWithPath() {
+  var messageMock = new MessageMock();
+  var rawContent= 'content';
 
-  route.renderPost('error');
+  var route = new BlogRoute({ message: messageMock });
 
-  return handler.hasHandlerBeenCalled;
+  route.readPostHtmlView(null, rawContent);
+
+  return messageMock.readTextFileCalledWithPath !== '' &&
+   route.rawContent === rawContent &&
+   messageMock.hasCallback;
 });
 
-roast.it('Render post with content', function renderPostWithContent() {
-  var render = new RenderMock();
-  var route = new BlogRoute({ message: render, res: 'res' });
+roast.it('Return 404 when post not found', function return404WhenNotFound() {
+  var responseMock = new ResponseMock();
 
-  route.renderPost(null, 'postContent');
+  var route = new BlogRoute({ res: responseMock });
 
-  return render.hasRenderBeenCalled;
+  route.readPostHtmlView({}, null);
+
+  return responseMock.result.indexOf('404') >= 0;
+});
+
+roast.it('Respond with full post', function respondWithFullPost() {
+  var messageMock = new MessageMock();
+  var responseMock = new ResponseMock();
+
+  var route = new BlogRoute({ message: messageMock, res: responseMock });
+
+  route.renderPost(null, '');
+
+  return responseMock.result.indexOf('200') >= 0;
+});
+
+roast.it('Return 500 when internal error', function return500WhenError() {
+  var responseMock = new ResponseMock();
+
+  var route = new BlogRoute({ res: responseMock });
+
+  route.renderPost({}, null);
+
+  return responseMock.result.indexOf('500') >= 0;
 });
