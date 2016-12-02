@@ -7,8 +7,7 @@ function render(req, res, http) {
   fs.readFile(fullPath, 'utf-8', function fileText(err, text) {
     var content = {
       response: http.template ? http.template(text, req.data) : text,
-      type: req.type,
-      nocache: req.nocache
+      type: req.type
     };
 
     http.handler(err, res, content);

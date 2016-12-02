@@ -18,12 +18,3 @@ roast.it('Handler responds with content', function handlerRespondsWithContent() 
 
   return res.result === '200;Type;Message';
 });
-
-roast.it('Handler responds with no-cache', function handlerRespondsWithNoCache() {
-  var res = new Response();
-  var content = { type: 'Type', response: 'Message', nocache: true };
-
-  handler(null, res, content);
-
-  return res.result === '200;Type;no-cache;Message';
-});

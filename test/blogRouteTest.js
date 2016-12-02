@@ -33,5 +33,5 @@ roast.it('Render post with content', function renderPostWithContent() {
 
   route.renderPost(null, 'postContent');
 
-  return render.hasRenderBeenCalled && render.hasCachingOff;
+  return render.hasRenderBeenCalled;
 });

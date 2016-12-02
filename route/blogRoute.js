@@ -21,7 +21,6 @@ BlogRoute.prototype.renderPost = function renderPost(err, postContent) {
     var request = {
       path: 'view/blogPost.html',
       type: 'text/html; charset=utf-8',
-      nocache: true,
       data: postContent
     };
 

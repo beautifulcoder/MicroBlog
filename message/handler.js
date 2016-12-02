@@ -8,10 +8,6 @@ function handler(err, res, content) {
   } else {
     var headers = { 'Content-Type': content.type };
 
-    if (content.nocache === true) {
-      headers['Cache-Control'] = 'no-cache';
-    }
-
     res.writeHead(okCode, headers);
     res.end(content.response);
   }
