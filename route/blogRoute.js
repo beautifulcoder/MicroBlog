@@ -3,8 +3,11 @@ var BlogRoute = function BlogRoute(context) {
   this.req = context.req;
   this.message = context.message;
 
-  this.contentType = 'text/html; charset=utf-8';
   this.rawContent = '';
+};
+
+BlogRoute.prototype.isValidRoute = function isValidRoute() {
+  return this.req.method === 'GET' && this.req.url.indexOf('/blog/') >= 0;
 };
 
 BlogRoute.prototype.route = function route() {
@@ -17,7 +20,7 @@ BlogRoute.prototype.route = function route() {
 
 BlogRoute.prototype.readPostHtmlView = function readPostHtmlView(err, rawContent) {
   if (err) {
-    this.res.writeHead(404, { 'Content-Type': this.contentType });
+    this.res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
     this.res.end('Post not found.');
     return;
   }
@@ -28,7 +31,7 @@ BlogRoute.prototype.readPostHtmlView = function readPostHtmlView(err, rawContent
 
 BlogRoute.prototype.renderPost = function renderPost(err, html) {
   if (err) {
-    this.res.writeHead(500, { 'Content-Type': this.contentType });
+    this.res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
     this.res.end('Internal error.');
     return;
   }
@@ -36,7 +39,7 @@ BlogRoute.prototype.renderPost = function renderPost(err, html) {
   var htmlContent = this.message.marked(this.rawContent);
   var responseContent = this.message.mustacheTemplate(html, { postContent: htmlContent });
 
-  this.res.writeHead(200, { 'Content-Type': this.contentType });
+  this.res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
   this.res.end(responseContent);
 };
 

@@ -4,6 +4,28 @@ var BlogRoute = require('../route/blogRoute');
 var MessageMock = require('./mock/messageMock');
 var ResponseMock = require('./mock/responseMock');
 
+roast.it('Is valid blog route', function isValidBlogRoute() {
+  var req = {
+    method: 'GET',
+    url: 'http://localhost/blog/a-simple-test'
+  };
+
+  var route = new BlogRoute({ req: req });
+
+  return route.isValidRoute();
+});
+
+roast.it('Is invalid blog route', function isInvalidBlogRoute() {
+  var req = {
+    method: 'GET',
+    url: 'http://localhost'
+  };
+
+  var route = new BlogRoute({ req: req });
+
+  return !route.isValidRoute();
+});
+
 roast.it('Read raw post with path', function readRawPostWithPath() {
   var messageMock = new MessageMock();
   var req = {
