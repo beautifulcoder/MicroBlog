@@ -42,7 +42,7 @@ roast.it('Read raw post with path', function readRawPostWithPath() {
 
 roast.it('Read post view with path', function readPostViewWithPath() {
   var messageMock = new MessageMock();
-  var rawContent= 'content';
+  var rawContent = 'content';
 
   var route = new BlogRoute({ message: messageMock });
 
